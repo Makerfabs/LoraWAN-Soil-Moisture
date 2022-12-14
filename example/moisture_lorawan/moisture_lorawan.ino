@@ -103,8 +103,6 @@ void read_sensor()
     pwn_init();
     delay(50);
 
-    ADCSRA |= (1 << ADIF);
-    /*
     int ADC_O_1; // ADC Output First 8 bits
     int ADC_O_2; // ADC Output Next 2 bits
 
@@ -161,13 +159,19 @@ void read_sensor()
         delay(50);
     }
     bat_adc /= 3;
-    */
 
     // soil_adc = analogRead(A2);
     soil_percent = (int)((soil_adc - SOIL_ADC_WATER) / SOIL_ADC_UNIT);
 
     // bat_adc = analogRead(A3);
     bat_vol = (int)(bat_adc * 690.0 / 470.0 * 3300.0 / 1024.0);
+
+    if (soil_percent > 100)
+        soil_percent = 100;
+    else if (soil_percent < 0)
+        soil_percent = 0;
+
+    bat_vol = bat_vol / 100;
 }
 
 // -------------------- Lorawan ---------------------------------
@@ -283,12 +287,6 @@ String create_tx_str()
 
 void send_lorawan()
 {
-    if (soil_percent > 100)
-        soil_percent = 100;
-    else if (soil_percent < 0)
-        soil_percent = 0;
-
-    bat_vol = bat_vol / 100;
 
     log_out_num("BAT ADC:", bat_adc);
     log_out_num("BAT VOL:", bat_vol);

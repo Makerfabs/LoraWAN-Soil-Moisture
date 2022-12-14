@@ -25,6 +25,7 @@ void setup()
     pinMode(SENSOR_POWER_PIN, OUTPUT);
     pinMode(LORAWAN_RST, OUTPUT);
     pinMode(LED_PIN, OUTPUT);
+    pinMode(BUTTON_PIN, INPUT);
 
     // Ra08 restart
     digitalWrite(LED_PIN, 1);
@@ -36,6 +37,7 @@ void setup()
 
     lorawan_serial.begin(9600); // your esp's baud rate might be different
     log_init();
+    sendData("AT", 3000);
 }
 
 void loop()
@@ -45,10 +47,19 @@ void loop()
 
     log_out_num("Count:", count++);
     read_sensor();
-    send_lorawan();
+    sensor_log();
 
     log_out("-----------------------------------");
     log_out("");
+
+    if (digitalRead(BUTTON_PIN) == 0)
+    {
+        delay(100);
+        if (digitalRead(BUTTON_PIN) == 0)
+        {
+            lorawan_join();
+        }
+    }
 }
 
 // ---------------------- Task -----------------------------
@@ -90,6 +101,13 @@ void read_sensor()
 
     bat_adc = analogRead(A3);
     bat_vol = (int)(bat_adc * 690.0 / 470.0 * 3300.0 / 1024.0);
+
+    if (soil_percent > 100)
+        soil_percent = 100;
+    else if (soil_percent < 0)
+        soil_percent = 0;
+
+    bat_vol = bat_vol / 100;
 }
 
 // -------------------- Lorawan ---------------------------------
@@ -124,25 +142,61 @@ void sendData(String command, const int timeout)
     log_out(response.c_str());
 }
 
-void send_lorawan()
+
+int sendData_keyword(String command, const int timeout, String keyword)
 {
-    if (soil_percent > 100)
-        soil_percent = 100;
-    else if (soil_percent < 0)
-        soil_percent = 0;
+    String response = "";
 
-    bat_vol = bat_vol / 100;
+    log_out(command.c_str());
+    lorawan_serial.println(command); // send the read character to the Serial
 
-    log_out("");
-    log_out_num("BAT ADC       :", bat_adc);
-    log_out_num("BAT VOL       :", bat_vol);
-    log_out_num("SOIL ADC      :", soil_adc);
-    log_out_num("SOIL PER      :", soil_percent);
-    log_out_num("TEMPERAUTRE   :", (int)temperature);
-    log_out_num("HUMIDITY      :", (int)humidity);
-    log_out("");
+    long int time = millis();
 
+    while ((time + timeout) > millis())
+    {
+        while (lorawan_serial.available())
+        {
+            char c = lorawan_serial.read(); // read the next character.
+
+            if (c == '\n')
+            {
+                log_out(response.c_str());
+
+                if (response.indexOf(keyword) != -1)
+                {
+                    return 1;
+                }
+
+                response = "";
+            }
+            else if (c == '\r')
+                continue;
+            else
+                response += c;
+        }
+    }
+
+    log_out(response.c_str());
+    return 0;
+}
+
+void lorawan_join()
+{
     sendData("AT", 1000);
+
+    char cmd[80];
+
+    sprintf(cmd, "%s%s", "AT+CDEVEUI=", DEVEUI);
+    sendData(cmd, AT_TIMEOUT);
+    sprintf(cmd, "%s%s", "AT+CAPPEUI=", APPEUI);
+    sendData(cmd, AT_TIMEOUT);
+    sprintf(cmd, "%s%s", "AT+CAPPKEY=", APPKEY);
+    sendData(cmd, AT_TIMEOUT);
+
+    sendData("AT+CCLASS=0", AT_TIMEOUT);
+    sendData("AT+CJOINMODE=0", AT_TIMEOUT);
+    sendData_keyword("AT+CJOIN=1,0,8,8", 30000, "Joined");
+    sendData_keyword("AT+DTRX=1,2,8,12345678", 30000, "OK+SENT");
 }
 
 // --------------------- Device init --------------------------
@@ -206,4 +260,17 @@ void log_out_num(const char *log, int num)
     Serial.print(log);
     Serial.println(num);
 #endif
+}
+
+void sensor_log()
+{
+
+    log_out("");
+    log_out_num("BAT ADC       :", bat_adc);
+    log_out_num("BAT VOL       :", bat_vol);
+    log_out_num("SOIL ADC      :", soil_adc);
+    log_out_num("SOIL PER      :", soil_percent);
+    log_out_num("TEMPERAUTRE   :", (int)temperature);
+    log_out_num("HUMIDITY      :", (int)humidity);
+    log_out("");
 }
