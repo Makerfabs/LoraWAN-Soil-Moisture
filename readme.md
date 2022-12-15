@@ -20,14 +20,14 @@ Note:
 
 [Makerfabs home page](https://www.makerfabs.com/)
 
-[Makerfabs Wiki](http://wiki.makerfabs.com/)
+[Makerfabs Wiki](https://wiki.makerfabs.com/)
 
 
 
 # LoraWAN Soil Moisture
 ## Intruduce
 
-Product Link ：[LoRaWAN Temperature/ Humidity/ Soil Moisture Sensor](https://www.makerfabs.com/lorawa-temperatur-humidity-soil-moisture-sensor.html) 
+Product Link ：[LoRaWAN Temperature/ Humidity/ Soil Moisture Sensor](https://www.makerfabs.com/lorawan-temperatur-humidity-soil-moisture-sensor.html) 
 
 Wiki Link : []() 
 
@@ -101,7 +101,9 @@ There are many common USB serial port modules on the market, which are basically
 
 
 
-## Firmware
+## Testing file for manufacture
+
+**moisture_test.ino**
 
 This is a test demo. You can check all sensor, button, led and Lorawan.
 
@@ -121,7 +123,15 @@ Change Lorawan config to yourself.
 
 ![end_device](md_pic/end_device.jpg)
 
-## Example
+When hold on button, will send lorawan message to TTN.
+
+```c++
+
+```
+
+
+
+## Firmware Frame
 
 ### mositure_lorawan
 
@@ -134,8 +144,6 @@ The register is used to read the soil ADC and the battery voltage ADC.
 *There is a bug in the battery voltage ADC reading at present and it is being modified.*
 
  
-
-
 
 Change Lorawan config to yourself.
 
@@ -191,6 +199,8 @@ function decodeUplink(input) {
 ```
 
 
+
+## Example
 
 
 
