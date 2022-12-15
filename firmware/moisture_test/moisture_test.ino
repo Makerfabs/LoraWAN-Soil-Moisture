@@ -14,10 +14,10 @@ int soil_adc = 0; // variable to store the value coming from the sensor
 int soil_percent = 0;
 int bat_adc = 0; // the voltage of battery
 int bat_vol = 0;
-
 float temperature = 0.0;
 float humidity = 0.0;
 
+int init_flag = 0;
 int count = 0; // WDT count
 
 void setup()
@@ -142,7 +142,6 @@ void sendData(String command, const int timeout)
     log_out(response.c_str());
 }
 
-
 int sendData_keyword(String command, const int timeout, String keyword)
 {
     String response = "";
@@ -184,17 +183,23 @@ void lorawan_join()
 {
     sendData("AT", 1000);
 
-    char cmd[80];
+    if (init_flag == 0)
+    {
+        char cmd[80];
 
-    sprintf(cmd, "%s%s", "AT+CDEVEUI=", DEVEUI);
-    sendData(cmd, AT_TIMEOUT);
-    sprintf(cmd, "%s%s", "AT+CAPPEUI=", APPEUI);
-    sendData(cmd, AT_TIMEOUT);
-    sprintf(cmd, "%s%s", "AT+CAPPKEY=", APPKEY);
-    sendData(cmd, AT_TIMEOUT);
+        sprintf(cmd, "%s%s", "AT+CDEVEUI=", DEVEUI);
+        sendData(cmd, AT_TIMEOUT);
+        sprintf(cmd, "%s%s", "AT+CAPPEUI=", APPEUI);
+        sendData(cmd, AT_TIMEOUT);
+        sprintf(cmd, "%s%s", "AT+CAPPKEY=", APPKEY);
+        sendData(cmd, AT_TIMEOUT);
 
-    sendData("AT+CCLASS=0", AT_TIMEOUT);
-    sendData("AT+CJOINMODE=0", AT_TIMEOUT);
+        sendData("AT+CCLASS=0", AT_TIMEOUT);
+        sendData("AT+CJOINMODE=0", AT_TIMEOUT);
+
+        init_flag = 1;
+    }
+
     sendData_keyword("AT+CJOIN=1,0,8,8", 30000, "Joined");
     sendData_keyword("AT+DTRX=1,2,8,12345678", 30000, "OK+SENT");
 }

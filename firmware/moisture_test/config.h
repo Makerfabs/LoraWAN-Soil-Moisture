@@ -20,11 +20,6 @@
 
 #define AT_TIMEOUT 3000
 
-#define DEVEUI "70B3D57ED0057468"
-#define APPEUI "0000000000000000"
-#define APPKEY "A614344378DC15A24BFA3B43E6C4C320"
-
-// Set sleep time, when value is 1 almost sleep 20s,
-// when value is 450, almost 1 hour.
-// #define SLEEP_CYCLE 450
-#define SLEEP_CYCLE 60
+#define DEVEUI "YOUR_DEVEUI"
+#define APPEUI "YOUR_APPEUI"
+#define APPKEY "YOUR_APPKEY"
