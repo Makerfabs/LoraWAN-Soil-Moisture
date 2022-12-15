@@ -105,6 +105,8 @@ There are many common USB serial port modules on the market, which are basically
 
 This is a test demo. You can check all sensor, button, led and Lorawan.
 
+![serial](md_pic/serial.jpg)
+
 Change Lorawan config to yourself.
 
 ```c++
@@ -126,6 +128,12 @@ Change Lorawan config to yourself.
 This routine is expected to run on 3 AAA batteries for a year (once per hour).
 
 Hibernation current 26ua, normal working current 4.7ma, peak emission 8.7ma.
+
+The register is used to read the soil ADC and the battery voltage ADC. 
+
+*There is a bug in the battery voltage ADC reading at present and it is being modified.*
+
+ 
 
 
 
