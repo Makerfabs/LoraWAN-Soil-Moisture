@@ -4,11 +4,11 @@
 
 ```c++
 /*
-Version:		V1.0
+Version:		V1.1
 Author:			Vincent
 Create Date:	2022/12/15
 Note:
-	
+	2022/12/16 V1.1	:Fix adc3 read error.
 */
 ```
 ![](md_pic/main.jpg)
@@ -133,7 +133,7 @@ When hold on button, will send lorawan message to TTN.
 
 ## Firmware Frame
 
-### mositure_lorawan
+**mositure_lorawan**
 
 This routine is expected to run on 3 AAA batteries for a year (once per hour).
 
@@ -141,7 +141,7 @@ Hibernation current 26ua, normal working current 4.7ma, peak emission 8.7ma.
 
 The register is used to read the soil ADC and the battery voltage ADC. 
 
-*There is a bug in the battery voltage ADC reading at present and it is being modified.*
+~~*There is a bug in the battery voltage ADC reading at present and it is being modified.*~~
 
  
 

@@ -135,8 +135,9 @@ void read_sensor()
     soil_adc /= 3;
 
     // Battery Read
-    // ADC3  internal 1.1V as ADC reference voltage
-    ADMUX = _BV(REFS1) | _BV(REFS0) | _BV(MUX1) | _BV(MUX0);
+    // ADC3  AVCC as reference voltage
+    ADMUX = _BV(REFS0) | _BV(MUX1) | _BV(MUX0);
+    ADCSRA = _BV(ADEN) | _BV(ADPS1) | _BV(ADPS0);
 
     bat_adc = 0;
     delay(50);
