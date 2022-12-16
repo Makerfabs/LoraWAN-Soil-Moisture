@@ -136,7 +136,7 @@ void read_sensor()
 
     // Battery Read
     // ADC3  internal 1.1V as ADC reference voltage
-    c = _BV(REFS1) | _BV(REFS0) | _BV(MUX1) | _BV(MUX0);
+    ADMUX = _BV(REFS1) | _BV(REFS0) | _BV(MUX1) | _BV(MUX0);
 
     bat_adc = 0;
     delay(50);
