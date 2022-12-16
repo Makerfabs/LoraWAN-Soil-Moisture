@@ -42,7 +42,7 @@ void setup()
 
     read_sensor();
 
-    // lorawan_init();
+    lorawan_init();
 
     while (lorawan_join())
     {
