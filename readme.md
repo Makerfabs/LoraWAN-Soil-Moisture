@@ -4,11 +4,12 @@
 
 ```c++
 /*
-Version:		V1.1
+Version:		V1.2
 Author:			Vincent
 Create Date:	2022/12/15
 Note:
-	2022/12/16 V1.1	:Fix adc3 read error.
+	2022/12/30	V1.2	:Update readme
+	2022/12/16 	V1.1	:Fix adc3 read error.
 */
 ```
 ![](md_pic/main.jpg)
@@ -29,9 +30,9 @@ Note:
 
 Product Link ：[LoRaWAN Temperature/ Humidity/ Soil Moisture Sensor](https://www.makerfabs.com/lorawan-temperatur-humidity-soil-moisture-sensor.html) 
 
-Wiki Link : []() 
+Wiki Link : [LoRaWAN Temperature/ Humidity Soil Moisture Sensor](https://wiki.makerfabs.com/LoRaWAN_Temperature_Humidity_Soil_Moisture_Sensor.html) 
 
-
+This module monitor soil moisture via capacitive method, with waterproof coating, it avoids the corrosion problem that usually happens on cheap resistor-mode soil moisture sensor. There is also onboard AHT10 -air temperature/ humidity sensor, to monitor air status, proper for usage in the greenhouse. This module uses 3x AAA battery as power, with sleep current of 26uA and working current of 4mA, the average working time can be more than 1 year. (with 1-hour message interval, Class A ).
 
 
 ## Feature
@@ -202,15 +203,19 @@ function decodeUplink(input) {
 
 ## Example
 
-
-
 ### 328p_at
 
 Example for AT command test.
+
+### adc_sleep
+
+Tests whether ADC reads normally after MCU sleeps.
 
 
 
 # Case
 
-3D print case is not ready.
+3D print case
+
+![case](md_pic/case.jpg)
 
