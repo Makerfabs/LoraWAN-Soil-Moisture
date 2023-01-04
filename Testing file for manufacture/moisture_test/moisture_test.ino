@@ -57,7 +57,8 @@ void loop()
         delay(100);
         if (digitalRead(BUTTON_PIN) == 0)
         {
-            lorawan_join();
+            while (1)
+                lorawan_join();
         }
     }
 }
