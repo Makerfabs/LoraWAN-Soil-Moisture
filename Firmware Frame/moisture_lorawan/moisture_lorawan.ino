@@ -14,6 +14,7 @@ int soil_adc = 0; // variable to store the value coming from the sensor
 int soil_percent = 0;
 int bat_adc = 0; // the voltage of battery
 int bat_vol = 0;
+int tx_count = 0;
 
 float temperature = 0.0;
 float humidity = 0.0;
@@ -275,10 +276,10 @@ int lorawan_join()
 
 String create_tx_str()
 {
-    String temp = "AT+DTRX=1,2,8,";
+    String temp = "AT+DTRX=1,2,10,";
 
     char data_str[80];
-    sprintf(data_str, "%02x%02x%02x%02x", (int)temperature, (int)humidity, soil_percent, bat_vol);
+    sprintf(data_str, "%02x%02x%02x%02x%04x", (int)temperature, (int)humidity, soil_percent, bat_vol, tx_count);
     temp = temp + data_str;
 
     log_out(temp.c_str());
@@ -295,6 +296,8 @@ void send_lorawan()
     log_out_num("SOIL PER:", soil_percent);
     log_out_num("TEMPERAUTRE:", (int)temperature);
     log_out_num("HUMIDITY:", (int)humidity);
+
+    log_out_num("TX COUNT:", ++tx_count);
 
     sendData_keyword(create_tx_str(), 30000, "OK+SENT");
 }
@@ -352,8 +355,10 @@ void watchdog_init()
 ISR(WDT_vect)
 {
 #if DEBUG_OUT_ENABLE
-    Serial.print("[Watch dog]");
-    Serial.println(count);
+    // Serial.print("[Watch dog]");
+    // Serial.println(count);
+    if (count % 50 == 0)
+        Serial.print(".");
 #endif
 
     delay(100);

@@ -112,7 +112,7 @@ void read_sensor()
 
 // -------------------- Lorawan ---------------------------------
 
-void sendData(String command, const int timeout)
+void sendData(String command, long int timeout)
 {
     String response = "";
 
@@ -142,7 +142,7 @@ void sendData(String command, const int timeout)
     log_out(response.c_str());
 }
 
-int sendData_keyword(String command, const int timeout, String keyword)
+int sendData_keyword(String command, long int timeout, String keyword)
 {
     String response = "";
 
@@ -200,7 +200,7 @@ void lorawan_join()
         init_flag = 1;
     }
 
-    sendData_keyword("AT+CJOIN=1,0,8,8", 30000, "Joined");
+    sendData_keyword("AT+CJOIN=1,0,8,8", 60000, "Joined");
     sendData_keyword("AT+DTRX=1,2,8,12345678", 30000, "OK+SENT");
 }
 
