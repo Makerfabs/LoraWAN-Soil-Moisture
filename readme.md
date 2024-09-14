@@ -177,9 +177,9 @@ function decodeUplink(input) {
   
   var temp = input.bytes[0]
   var humi = input.bytes[1]
-  var adc = input.bytes[2]
-  var bat = input.bytes[3]
-  var num = input.bytes[4] * 100 + input.bytes[5] 
+  var adc = input.bytes[2]*256+input.bytes[3]
+  var bat = input.bytes[4]/10
+  var num = input.bytes[5] * 100 + input.bytes[6] 
   
   return {
     data:{

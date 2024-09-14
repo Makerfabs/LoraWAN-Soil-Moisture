@@ -276,11 +276,11 @@ int lorawan_join()
 
 String create_tx_str()
 {
-    String temp = "AT+DTRX=1,2,10,";
+    String temp = "AT+DTRX=1,2,12,";
 
     char data_str[80];
     // sprintf(data_str, "%02x%02x%02x%02x%04x", (int)temperature, (int)humidity, soil_percent, bat_vol, tx_count);
-    sprintf(data_str, "%02x%02x%02x%02x%04x", (int)temperature, (int)humidity, soil_adc, bat_vol, tx_count);
+    sprintf(data_str, "%02x%02x%04x%02x%04x", (int)temperature, (int)humidity, soil_adc, bat_vol, tx_count);
     temp = temp + data_str;
 
     log_out(temp.c_str());
